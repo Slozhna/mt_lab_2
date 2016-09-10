@@ -26,8 +26,21 @@ class Ball {
         }
     }
 
+    Ball(Component c, Color color){
+        this.canvas = c;
+        this.color = color;
+
+        if (Math.random() < 0.5){
+            x = new Random().nextInt(this.canvas.getWidth());
+            y = 0;
+        }else{
+            x = 0;
+            y = new Random().nextInt(this.canvas.getHeight());
+        }
+    }
+
     void draw(Graphics2D g2){
-        g2.setColor(this.color);
+        g2.setColor(color);
         g2.fill(new Ellipse2D.Double(x,y,XSIZE,YSIZE));
     }
 

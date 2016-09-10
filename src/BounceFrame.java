@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 class BounceFrame extends JFrame {
@@ -26,6 +24,8 @@ class BounceFrame extends JFrame {
         buttonPanel.setBackground(Color.lightGray);
 
         JButton buttonStart     = new JButton("►");
+        JButton buttonStartBlue = new JButton("►");
+        JButton buttonStartRed  = new JButton("►");
         JButton buttonStop      = new JButton("■");
         JButton buttonLoss      = new JButton("⏮");
         JButton buttonBoost     = new JButton("⏭");
@@ -33,13 +33,17 @@ class BounceFrame extends JFrame {
         JButton buttonGrow      = new JButton("⬤");
 
         Threads = new ArrayList<>();
-        buttonStart.addActionListener(e -> {
-            Ball b = new Ball(canvas);
 
-            canvas.add(b);
-            Threads.add(new BallThread(b));
-            Threads.get(Threads.size() - 1).start();
-            System.out.println("Thread name = " + Threads.get(Threads.size() - 1).getName());
+        buttonStart.addActionListener(e -> {
+            add_colored_ball(new Color((int)(Math.random() * 0x1000000)));
+        });
+
+        buttonStartRed.addActionListener(e -> {
+            add_colored_ball(Color.red);
+        });
+
+        buttonStartBlue.addActionListener(e -> {
+            add_colored_ball(Color.blue);
         });
 
         buttonStop.addActionListener(e -> System.exit(0));
@@ -60,7 +64,12 @@ class BounceFrame extends JFrame {
             Threads.forEach(BallThread::decrease);
         });
 
+        buttonStartBlue.setForeground(Color.blue);
+        buttonStartRed.setForeground(Color.red);
+
         buttonPanel.add(buttonStart);
+        buttonPanel.add(buttonStartRed);
+        buttonPanel.add(buttonStartBlue);
         buttonPanel.add(buttonStop);
         buttonPanel.add(buttonLoss);
         buttonPanel.add(buttonBoost);
@@ -69,5 +78,13 @@ class BounceFrame extends JFrame {
         buttonPanel.add(buttonGrow);
 
         content.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void add_colored_ball(Color color) {
+        Ball b = new Ball(canvas, color);
+        canvas.add(b);
+        Threads.add(new BallThread(b));
+        Threads.get(Threads.size() - 1).start();
+        System.out.println("Thread name = " + Threads.get(Threads.size() - 1).getName());
     }
 }
