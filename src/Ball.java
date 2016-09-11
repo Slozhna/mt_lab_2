@@ -3,16 +3,17 @@ import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
 class Ball {
-    private Component canvas;
+    private BallCanvas canvas;
     private int XSIZE = 20;
     private int YSIZE = 20;
     private int x = 0;
-    private int y= 0;
+    private int y = 0;
     private int dx = 2;
     private int dy = 2;
     private Color color;
+    private boolean caught;
 
-    Ball(Component c){
+    Ball(BallCanvas c){
         this.canvas = c;
         Random random = new Random();
         this.color = new Color(random.nextInt() * 0x1000000);
@@ -26,9 +27,10 @@ class Ball {
         }
     }
 
-    Ball(Component c, Color color){
+    Ball(BallCanvas c, Color color){
         this.canvas = c;
         this.color = color;
+        this.caught = false;
 
         if (Math.random() < 0.5){
             x = new Random().nextInt(this.canvas.getWidth());
@@ -44,23 +46,42 @@ class Ball {
         g2.fill(new Ellipse2D.Double(x,y,XSIZE,YSIZE));
     }
 
-    public void sizeUp() {
-        if (XSIZE <= 50 && YSIZE <=50) {
+    void sizeUp() {
+        if (XSIZE <= 50 && YSIZE <=50 && !wasCaught()) {
             XSIZE += 10;
             YSIZE += 10;
         }
     }
 
-    public void sizeDown() {
-        if (XSIZE > 20 && YSIZE  > 20) {
+    void sizeDown() {
+        if (XSIZE > 20 && YSIZE  > 20 && !wasCaught()) {
             XSIZE -= 10;
             YSIZE -= 10;
         }
     }
 
-    void move(){
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
+    }
+
+    boolean wasCaught() {
+        return caught;
+    }
+
+    boolean move(){
         x += dx;
         y += dy;
+
+        if (canvas.isCaught(this)) {
+            System.out.println("CAUGHT");
+            caught = true;
+            return false;
+        }
+
         if (x < 0){
             x = 0;
             dx = -dx;
@@ -78,5 +99,7 @@ class Ball {
             dy = -dy;
         }
         this.canvas.repaint();
+
+        return true;
     }
 }

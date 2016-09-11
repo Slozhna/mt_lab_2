@@ -35,7 +35,11 @@ class BounceFrame extends JFrame {
         Threads = new ArrayList<>();
 
         buttonStart.addActionListener(e -> {
-            add_colored_ball(new Color((int)(Math.random() * 0x1000000)));
+            // add_colored_ball(new Color((int)(Math.random() * 0x1000000)));
+            if (Math.random() > 0.4)
+                add_colored_ball(Color.red);
+            else
+                add_colored_ball(Color.blue);
         });
 
         buttonStartRed.addActionListener(e -> {
