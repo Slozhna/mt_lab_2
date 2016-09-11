@@ -79,6 +79,9 @@ class Ball {
         if (canvas.isCaught(this)) {
             System.out.println("CAUGHT");
             caught = true;
+            XSIZE = 0;
+            YSIZE = 0;
+            this.canvas.repaint();
             return false;
         }
 
